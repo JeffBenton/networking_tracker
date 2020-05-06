@@ -1,54 +1,77 @@
 import React from 'react';
 
-import LoginForm from "./LoginForm";
-import RegisterForm from "./RegisterForm";
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
+class RegisterForm extends React.Component {
 
-class LandingPage extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            name: "",
+            email: "",
+            password: "",
+            password_confirm: ""
+        };
+    }
 
-    state = {
-        displayLoginForm: true
-    };
-
-    swapForm = e => {
-        e.preventDefault();
-
+    handleChange = e => {
         this.setState({
-            displayLoginForm: !this.state.displayLoginForm
+            [e.target.name]: e.target.value
         });
     };
 
-    displayForm = () => {
-        if(this.state.displayLoginForm) {
-            return (
-                <>
-                <Row className="justify-content-md-center"><h4>Please sign in</h4></Row>
-            <Row className="justify-content-md-center"><LoginForm /></Row>
-                <Row className="justify-content-md-center"><p>or <a onClick={this.swapForm} href="/">register</a></p></Row>
-            </>
-        )
-        }
-        else {
-            return (
-                <>
-                <Row className="justify-content-md-center"><h4>Please register</h4></Row>
-            <Row className="justify-content-md-center"><RegisterForm /></Row>
-                <Row className="justify-content-md-center"><p>or <a onClick={this.swapForm} href="/">sign in</a></p></Row>
-            </>
-        )
-        }
+    handleSubmit = e => {
+        e.preventDefault();
+        /*
+            TODO
+                1. handle errors
+                2. handle success
+         */
+        fetch('api/register', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'name': this.state.name,
+                'email': this.state.email,
+                'password': this.state.password,
+                'password_confirm': this.state.password_confirm
+            })
+        })
+            .then(res => res.json())
+            .then(resJSON => {
+                this.setState({
+                    name: "",
+                    email: "",
+                    password: "",
+                    password_confirm: ""
+                })
+            })
     };
 
     render() {
         return (
-            <Container>
-            <Row className="justify-content-md-center"><h1>Welcome to Housekeeper!</h1></Row>
-        {this.displayForm()}
-        </Container>
-    )
+            <Form onSubmit={this.handleSubmit}>
+                <Form.Group>
+                    <Form.Control onChange={this.handleChange} type="text" name="name" placeholder="name" value={this.state.name} />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Control onChange={this.handleChange} type="email" name="email" placeholder="email" value={this.state.email} />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Control onChange={this.handleChange} type="password" name="password" placeholder="password" value={this.state.password} />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Control onChange={this.handleChange} type="password" name="password_confirm" placeholder="confirm password" value={this.state.password_confirm} />
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                    Register
+                </Button>
+            </Form>
+        )
     }
 }
 
-export default LandingPage;
+export default RegisterForm;
