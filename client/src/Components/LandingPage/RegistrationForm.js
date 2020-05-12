@@ -8,7 +8,8 @@ class RegisterForm extends React.Component {
     constructor() {
         super();
         this.state = {
-            name: "",
+            first_name: "",
+            last_name: "",
             email: "",
             password: "",
             password_confirm: ""
@@ -34,7 +35,8 @@ class RegisterForm extends React.Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                'name': this.state.name,
+                'first_name': this.state.first_name,
+                'last_name': this.state.last_name,
                 'email': this.state.email,
                 'password': this.state.password,
                 'password_confirm': this.state.password_confirm
@@ -43,7 +45,8 @@ class RegisterForm extends React.Component {
             .then(res => res.json())
             .then(resJSON => {
                 this.setState({
-                    name: "",
+                    first_name: "",
+                    last_name: "",
                     email: "",
                     password: "",
                     password_confirm: ""
@@ -55,7 +58,10 @@ class RegisterForm extends React.Component {
         return (
             <Form onSubmit={this.handleSubmit}>
                 <Form.Group>
-                    <Form.Control onChange={this.handleChange} type="text" name="name" placeholder="name" value={this.state.name} />
+                    <Form.Control onChange={this.handleChange} type="text" name="first_name" placeholder="first name" value={this.state.first_name} />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Control onChange={this.handleChange} type="text" name="last_name" placeholder="last name" value={this.state.last_name} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Control onChange={this.handleChange} type="email" name="email" placeholder="email" value={this.state.email} />
